@@ -6,7 +6,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   final HttpLink link = HttpLink(
-    'http://localhost:4000/graphql'
+    'http://10.0.2.2:4000/graphql'
   );
 
   ValueNotifier<GraphQLClient> client = ValueNotifier(

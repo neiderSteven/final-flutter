@@ -4,6 +4,8 @@ import 'package:location/location.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:http/http.dart';
+import 'package:http_parser/http_parser.dart';
 
 class AddUserScreen extends StatefulWidget {
   @override
@@ -118,20 +120,22 @@ class _AddUserScreenState extends State<AddUserScreen> {
                   ),
                 )
               : TextButton(
-                  onPressed: () {
+                  onPressed: () async {
                     setState(() {
                       _isSaving = true;
                     });
 
-                    print('**********object*************');
-                    print(image);
-                    print(_descripcionController.text);
-                    print(sentBy);
-                    print(long);
-                    print(lat);
+                    var byteData = image.readAsBytesSync();
+
+                    var multipartFile = MultipartFile.fromBytes(
+                      'photo',
+                      byteData,
+                      filename: '${DateTime.now().second}.jpg',
+                      contentType: MediaType("image", "jpg"),
+                    );
 
                     runMutation({
-                      'file': image,
+                      'file': multipartFile,
                       'description': _descripcionController.text,
                       'sentBy': sentBy,
                       'long': long,
